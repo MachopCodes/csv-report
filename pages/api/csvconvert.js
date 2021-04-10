@@ -55,9 +55,11 @@ export default (req, res) => {
                                 courseArray.map(course => {
                                     // 0 id, 1 name, 2 teacher
                                     // if the test course.id matches the course course.id
+                                    const c = course.split(',')
                                     if (t[1] === c[0]) {
                                         // if the object doesnt exist yet
-                                        if (courses.includes(something)) courses.push({
+                                        // if (courses.includes(something)) 
+                                        courses.push({
                                             id: c[0],
                                             name: c[1],
                                             teacher: c[2],
