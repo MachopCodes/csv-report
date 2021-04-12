@@ -30,7 +30,7 @@ export default (req, res) => {
                         split(test)[0] === split(mark)[0] && coursedata.map(course => {
                             const courseIndex = sCourses.findIndex(c => { return c.id === course[0] })
                             if (split(course)[0] === split(test)[1]) {
-                                const wMark = Math.round(split(mark)[2] * split(test)[2] / 100)
+                                const wMark = Math.round(split(mark)[2] * split(test)[2] /100)
                                 courseIndex === -1 
                                     ? sCourses.push({
                                         id: split(course)[0],
