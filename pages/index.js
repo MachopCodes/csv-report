@@ -1,34 +1,42 @@
-import React, { useState, useEffect } from "react";
-import Header from "../Components/Header";
-import Hero from "../Components/Hero"
-import { makeStyles } from "@material-ui/core";
-import axios from 'axios'
-import { useSession } from 'next-auth/client';
+import React, { useState} from "react";
+import axios from "axios"
 
 export default function Index() {
-  const useStyles = makeStyles((theme) => ({
-    background: {
-      backgroundImage: "url(https://fsb.zobj.net/crop.php?r=lcH6WsBNq_DsVqxgauVr2rgbho_Kx7v3_rK9jMovrdIcV01qOrU2x-ypfh4whSbi7XQ8rPPAdRl2VeoZJkYq31fiC1F5yMab7Av1pyrApZ5Pukg1SCmSrmNCq9wOcf0YB7yvrWR-t3pD1uAw)",
-      backgroundSize: "625px",
-      height: "1000px"
-    },
-  }));
-
-  const classes = useStyles();
-  const [subscription, setSubscription] = useState()
-  const [user, setUser] = useState();
-  const [session, loading] = useSession()
-
-  const fetchSubscriptions = async () => {
-    const result = await axios.get(`/api/subscription/${user}`);
-    setSubscription(result.data)
-  };
-  useEffect(() => user && fetchSubscriptions(user), [user])
-  useEffect(() => session && setUser(session.user.email), [session])
+  const [marks, setMarks] = useState()
+  const [clicked, setClicked] = useState(false)
+  const handleClick = async (e) => {
+    e.preventDefault()
+    setClicked(!clicked)
+    const res = await axios.get(`/api/csvconvert`)
+    setMarks(res.data)
+  }
+  const mString = marks && JSON.stringify(marks).replace("\r", "")
+  marks 
+    ? console.log('Report Card Object: ', marks)
+    : console.log('Hello! Please press the button to view the JSON Report Card')
 
   return (
-    <div className={classes.background}>
-      <p>hello this is an app</p>
+    <div>
+      <h1>Report Card File Reader</h1>
+      <h3>This application will read files if they are in the public folder and correctly formatted</h3>
+      <h4>files required:</h4>
+      <ul>
+        <li>courses.csv</li>
+        <li>marks.csv</li>
+        <li>students.csv</li>
+        <li>tests.csv</li>
+      </ul>
+      <h5>Files need to be in public folder and named in that way to be read by this system</h5>
+      <button onClick={handleClick}>press this to read csv files</button>
+      {clicked 
+      ? mString
+        ? <div>
+            <h2>Success! Check the console for the JSON object. </h2>
+            <p>{mString}</p>
+          </div>
+        : <p>Loading</p>
+      : <p>JSON Output:</p>
+      }
     </div>
   );
 }
