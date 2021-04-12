@@ -10,8 +10,10 @@ export default function Index() {
     const res = await axios.get(`/api/csvconvert`)
     setMarks(res.data)
   }
-    console.log('data: ', marks)
-    const mString = marks ? JSON.stringify(marks).replace("\r", "") : null
+  const mString = marks && JSON.stringify(marks).replace("\r", "")
+  marks 
+    ? console.log('Report Card Object: ', marks)
+    : console.log('Hello! Please press the button to view the JSON Report Card')
 
   return (
     <div>
